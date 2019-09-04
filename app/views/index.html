@@ -14,11 +14,14 @@
 		}
 
 		.download, .queue { 
-			padding: 3.5rem 3.5rem 0rem 3.5rem;
+			padding: 3rem 3rem 0rem 3rem;
 		}
 
-		.download h2 {
+		h2 {
 			margin-top: 0;
+			font-size: .75rem;
+			color: #9592de;
+			font-weight: 400;
 		}
 
 		.download .inputs {
@@ -74,10 +77,10 @@
 <form class="download">
 	<h2>Download YouTube Video</h2>
 	<div class="inputs">
-		<input type="url" name="url" id="url">
+		<input type="url" name="url" id="url" placeholder="Youtube URL (https://youtube.com/watch?...)">
 		<label>
 			<input type="checkbox" name="audio" id="audio">
-			Audio only
+			&nbsp;Audio only
 		</label>
 		<button type="submit">Download</button>
 	</div>
@@ -86,7 +89,7 @@
 <div class="queue">
 	<h2>Queue</h2>
 	<ul id="queue">
-		
+		<span>Empty</span>
 	</ul>
 </div>
 
@@ -100,7 +103,7 @@ document
 		e.preventDefault();
 
 		const url = document.querySelector('#url').value;
-		const extractAudio = document.querySelector('#audio').value === 'on';
+		const extractAudio = document.querySelector('#audio').checked;
 
 		socket.emit('download', {
 			url,

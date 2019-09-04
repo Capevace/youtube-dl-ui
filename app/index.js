@@ -1,6 +1,7 @@
 const config = require('./config');
 const cuid = require('cuid');
 const fs = require('fs');
+const morgan = require('morgan');
 const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
@@ -27,6 +28,8 @@ const download = require('./download');
 //
 // SETUP EXPRESS SERVER
 //
+app.use(morgan('tiny'));
+
 app.get('/', (req, res) => {
 	const pageContent = fs.readFileSync(__dirname + '/views/index.html')
 		.toString()
