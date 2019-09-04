@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>YTDL</title>
+	<style type="text/css">
+		body {
+			-webkit-font-smoothing: antialiased;
+    		-moz-osx-font-smoothing: grayscale;
+			margin: 0;
+			padding: 0;
+			background: #2c2b3f;
+			color: white;
+			font-family: Fira Sans,system-ui,BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,sans-serif;
+		}
+
+		.download, .queue { 
+			padding: 3.5rem 3.5rem 0rem 3.5rem;
+		}
+
+		.download h2 {
+			margin-top: 0;
+		}
+
+		.download .inputs {
+			display: flex;
+			width: 100%;
+		}
+
+		.download .inputs label {
+			display: flex;
+			align-items: center;
+			margin-left: 1rem;
+			margin-right: 1rem;
+		}
+
+		.download .inputs button {
+			padding: 0.5rem;
+			border-radius: 9999px;
+			background-color: #56547f;
+			border: none;
+			color: #e6e8ff;
+			font-size: .875rem;
+			padding: .5rem .75rem;
+			font-weight: 500;
+			cursor: pointer;
+		}
+
+		.download .inputs #url {
+			border-radius: 5px;
+			color: #e6e8ff;
+			border: none;
+			flex: 1;
+			background: #69669b;
+			padding: .5rem;
+		}
+
+		@media (max-width: 463px) {
+			.download .inputs {
+				flex-wrap: wrap;
+			}
+
+			.download .inputs #url {
+				margin-bottom: 10px;
+				margin-right: 0;
+			}
+
+			.download .inputs button {
+				flex: 1;
+			}
+		}
+	</style>
+</head>
+<body>
+<form class="download">
+	<h2>Download YouTube Video</h2>
+	<div class="inputs">
+		<input type="url" name="url" id="url">
+		<label>
+			<input type="checkbox" name="audio" id="audio">
+			Audio only
+		</label>
+		<button type="submit">Download</button>
+	</div>
+</form>
+
+<div class="queue">
+	<h2>Queue</h2>
+	<ul id="queue">
+		
+	</ul>
+</div>
+
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+const socket = io('http://localhost:3003');
+
+document
+	.querySelector('form')
+	.addEventListener('submit', (e) => {
+		e.preventDefault();
+
+		const url = document.querySelector('#url').value;
+		const extractAudio = document.querySelector('#audio').value === 'on';
+
+		socket.emit('download', {
+			url,
+			extractAudio
+		});
+	});
+
+socket.on('queue-update', data => {
+	const ul = document.querySelector('#queue');
+	ul.innerHTML = '';
+
+	console.log('New queue:', data.queue);
+	Object.values(data.queue).forEach(video => {
+		const li = document.createElement('li');
+		li.textContent = `${video.url} - Started: ${new Date(video.started).toUTCString()}`;
+
+		if (video.error) {
+			li.textContent = video.url + ' - ' + video.error;
+			li.classList.add('error');
+
+			const button = document.createElement('button');
+			button.textContent = 'Hide';
+			button.addEventListener('click', e => {
+				e.preventDefault();
+
+				socket.emit('remove-from-queue', { id: video.id });
+			});
+
+			li.append(button);
+		}
+
+		ul.append(li);
+	});
+});
+</script>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Fira+Mono|Fira+Sans:300,400,500,600" defer async>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{
+  "name": "mission-control-ytdl",
+  "version": "1.0.0",
+  "description": "A quick YouTube download service for mission-control.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/capevace/mission-control-ytdl.git"
+  },
+  "author": "Lukas Mateffy (@Capevace)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/capevace/mission-control-ytdl/issues"
+  },
+  "homepage": "https://github.com/capevace/mission-control-ytdl#readme",
+  "dependencies": {
+    "cuid": "^2.1.6",
+    "express": "^4.17.1",
+    "mission-control-client": "^1.1.0",
+    "rc": "^1.2.8",
+    "socket.io": "^2.2.0",
+    "youtube-dl": "^2.0.1"
+  }
+}
