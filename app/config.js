@@ -7,7 +7,7 @@ const config = require('rc')('mission-control-ytdl', {
 
 	http: {
 		url: 'http://localhost:3003',
-		socketPath: '/',
+		socketPath: '/socket.io',
 		port: 3003
 	},
 	missionControl: {
@@ -28,14 +28,16 @@ if (!fs.existsSync(config.basePath + '/config')) {
 	console.log('Config file not found. Creating...');
 
 	fs.writeFileSync(config.basePath + '/config', 
-`; Mission Control Config File
+`; YTDL Config File
 ; Enable debug mode here
 ;debug=true
 
 ;[http]
 ;url=http://localhost:3003
 ;port=3003
-;socketPath=/
+
+; Make sure this includes socket.io at the end if you didnt change the default socket.io hook.
+;socketPath=/socket.io
 
 ;[missionControl]
 ;url=

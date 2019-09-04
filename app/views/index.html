@@ -94,10 +94,8 @@
 
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
-const socketPath = '{{SOCKET_PATH}}';
-
 const socket = io({
-	path: socketPath !== '/' ? socketPath : undefined
+	path: '{{SOCKET_PATH}}'
 });
 
 document
