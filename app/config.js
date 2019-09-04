@@ -7,6 +7,7 @@ const config = require('rc')('mission-control-ytdl', {
 
 	http: {
 		url: 'http://localhost:3003',
+		socketPath: '/',
 		port: 3003
 	},
 	missionControl: {
@@ -34,6 +35,7 @@ if (!fs.existsSync(config.basePath + '/config')) {
 ;[http]
 ;url=http://localhost:3003
 ;port=3003
+;socketPath=/
 
 ;[missionControl]
 ;url=

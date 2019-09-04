@@ -33,7 +33,7 @@ app.use(morgan('tiny'));
 app.get('/', (req, res) => {
 	const pageContent = fs.readFileSync(__dirname + '/views/index.html')
 		.toString()
-		.replace(/\{\{URL\}\}/g, config.http.url);
+		.replace(/\{\{SOCKET_PATH\}\}/g, config.http.socketPath);
 
 	res.set('Content-Type', 'text/html').send(pageContent);
 });
@@ -48,6 +48,8 @@ const pushVideoQueue = () => {
 };
 
 io.on('connection', (socket) => {
+	console.log('Socket connected');
+	
 	socket.emit('queue-update', { queue: videos });
 
 	socket.on('remove-from-queue', data => {
