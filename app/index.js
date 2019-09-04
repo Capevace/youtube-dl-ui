@@ -28,9 +28,11 @@ const download = require('./download');
 // SETUP EXPRESS SERVER
 //
 app.get('/', (req, res) => {
-	res
-		.type('text/html')
-		.sendFile(__dirname + '/views/index.html');
+	const pageContent = fs.readFileSync(__dirname + '/views/index.html')
+		.toString()
+		.replace(/\{\{URL\}\}/g, config.http.url);
+
+	res.set('Content-Type', 'text/html').send(pageContent);
 });
 
 
