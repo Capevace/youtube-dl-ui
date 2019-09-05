@@ -63,7 +63,8 @@ io.on('connection', (socket) => {
 			id,
 			started: new Date(),
 			url: data.url,
-			error: null
+			error: null,
+			output: []
 		};
 
 		videos[id] = video;
@@ -72,6 +73,9 @@ io.on('connection', (socket) => {
 		try {
 			await download(data.url, {
 				extractAudio: data.extractAudio
+			}, (outputLine) => {
+				video.output.push(outputLine);
+				pushVideoQueue();
 			});
 
 			delete videos[id];

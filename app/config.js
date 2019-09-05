@@ -32,6 +32,9 @@ if (!fs.existsSync(config.basePath + '/config')) {
 ; Enable debug mode here
 ;debug=true
 
+;videosPath=
+;audioPath
+
 ;[http]
 ;url=http://localhost:3003
 ;port=3003
@@ -42,9 +45,6 @@ if (!fs.existsSync(config.basePath + '/config')) {
 ;[missionControl]
 ;url=
 ;apiKey
-
-;videosPath=
-;audioPath
 `
 	);
 }

@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/capevace/mission-control-ytdl#readme",
   "dependencies": {
+    "@braintree/sanitize-url": "^3.1.0",
     "cuid": "^2.1.6",
     "express": "^4.17.1",
     "mission-control-client": "^1.1.0",
