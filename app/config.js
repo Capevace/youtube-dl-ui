@@ -1,6 +1,9 @@
 const fs = require('fs');
 
-const basePath = require('os').homedir() + '/.mission-control-ytdl';
+const basePath = process.env.NODE_ENV === 'production'
+	? '/etc/mission-control-ytdl'
+	: require('os').homedir() + '/.mission-control-ytdl';
+
 const config = require('rc')('mission-control-ytdl', {
 	basePath,
 	debug: false,
