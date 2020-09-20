@@ -1,6 +1,6 @@
 {
   "name": "youtube-dl-ui",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A simple UI server for youtube-dl, letting you download high quality video or audio.",
   "main": "app/index.js",
   "scripts": {
