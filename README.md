@@ -1,7 +1,7 @@
 <div align="center">
-	<!-- <a href="https://mateffy.me/mission-control-project">
-		<img src="resources/icon-web.png">
-	</a> -->
+	<a href="https://mateffy.me/youtube-dl-ui">
+		<img src="resources/screenshot.png">
+	</a>
 	<h1>youtube-dl-ui</h1>
 	<p>
 		Basic web UI for youtube-dl. Download a URL in highest quality, choosing between video or audio-only.
