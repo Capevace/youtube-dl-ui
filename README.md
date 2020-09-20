@@ -39,6 +39,9 @@ Options:
 A config file for youtube-dl-ui will be created at `$HOME_DIR/.youtube-dl-ui/config`. However, options passed as command line arguments override settings in this file.
 
 ## Changelog
+### Version 1.0.2
+- Changed HTML title
+
 ### Version 1.0.1
 - Forgot to add README lol
 
