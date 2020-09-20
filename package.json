@@ -1,7 +1,7 @@
 {
-  "name": "mission-control-ytdl",
-  "version": "1.0.0",
-  "description": "A quick YouTube download service for mission-control.",
+  "name": "youtube-dl-ui",
+  "version": "0.0.1",
+  "description": "A simple UI server for youtube-dl, letting you download high quality video or audio.",
   "main": "app/index.js",
   "scripts": {
     "start": "node app/index.js"
@@ -15,9 +15,13 @@
   "bugs": {
     "url": "https://github.com/capevace/mission-control-ytdl/issues"
   },
+  "bin": {
+    "youtube-dl-ui": "app/index.js"
+  },
   "homepage": "https://github.com/capevace/mission-control-ytdl#readme",
   "dependencies": {
     "@braintree/sanitize-url": "^3.1.0",
+    "commander": "^6.1.0",
     "cuid": "^2.1.6",
     "express": "^4.17.1",
     "mission-control-client": "^1.1.0",

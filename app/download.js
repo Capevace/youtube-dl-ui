@@ -7,10 +7,8 @@ const fs = require('fs');
 
 function download(url, options = {}, onOutput = () => {}) {
 	return new Promise((resolve, reject) => {
-		console.log('Downloading', url);
-
 		const safeUrl = sanitizeUrl(url);
-		const cwd = options.extractAudio ? config.audioPath : config.videosPath;
+		const cwd = options.extractAudio ? config.audioPath : config.videoPath;
 
 		if(!fs.existsSync(cwd)) {
 			return reject(new Error('The specified download directory: ' + cwd + ' does not exist.'));
@@ -24,11 +22,8 @@ function download(url, options = {}, onOutput = () => {}) {
 			{ cwd }
 		);
 
-		onOutput('[YTDL] Starting download...');
-
 		let stdout = '';
 		downloadProcess.stdout.on('data', (line) => {
-			console.log(line.toString());
 			stdout += line;
 
 			onOutput(String(line));
@@ -41,7 +36,6 @@ function download(url, options = {}, onOutput = () => {}) {
 
 		downloadProcess.on('close', (code) => {
 			if (stderr !== '') {
-				console.log(stderr);
 				reject(new Error(String(stderr)));
 			} else {
 				resolve();

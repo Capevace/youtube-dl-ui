@@ -1,15 +1,19 @@
 const fs = require('fs');
+const argv = require('./argv');
 
 const basePath = process.env.NODE_ENV === 'production'
-	? '/etc/mission-control-ytdl'
-	: require('os').homedir() + '/.mission-control-ytdl';
+	? '/etc/youtube-dl-ui'
+	: require('os').homedir() + '/.youtube-dl-ui';
 
-const config = require('rc')('mission-control-ytdl', {
+const defaultVideoPath = basePath + '/video';
+const defaultAudioPath = basePath + '/audio';
+
+const config = require('rc')('youtube-dl-ui', {
 	basePath,
 	debug: false,
 
 	http: {
-		url: 'http://localhost:3003',
+		// url: 'http://localhost:3003',
 		socketPath: '/socket.io',
 		port: 3003
 	},
@@ -17,9 +21,25 @@ const config = require('rc')('mission-control-ytdl', {
 		url: 'http://localhost:3000',
 		apiKey: ''
 	},
-	videosPath: basePath + '/videos',
-	audioPath: basePath + '/audio'
+	videoPath: defaultVideoPath,
+	audioPath: defaultAudioPath
 });
+
+if (argv.debug) {
+	config.debug = argv.debug;
+}
+
+if (argv.port) {
+	config.http.port = argv.port;
+}
+
+if (argv.videoPath) {
+	config.videoPath = argv.videoPath;
+}
+
+if (argv.audioPath) {
+	config.audioPath = argv.audioPath;
+}
 
 if (!fs.existsSync(config.basePath)) {
 	console.log('Base path not found. Creating base directory ' + config.basePath);
@@ -35,15 +55,11 @@ if (!fs.existsSync(config.basePath + '/config')) {
 ; Enable debug mode here
 ;debug=true
 
-;videosPath=
-;audioPath
+;videoPath=
+;audioPath=
 
 ;[http]
-;url=http://localhost:3003
 ;port=3003
-
-; Make sure this includes socket.io at the end if you didnt change the default socket.io hook.
-;socketPath=/socket.io
 
 ;[missionControl]
 ;url=
@@ -52,24 +68,18 @@ if (!fs.existsSync(config.basePath + '/config')) {
 	);
 }
 
-if (!fs.existsSync(config.basePath + '/videos')) {
-	console.log('Default video path not found. Creating videos directory ' + config.basePath + '/videos');
+if (config.videoPath === defaultVideoPath && !fs.existsSync(defaultVideoPath)) {
+	console.log('Default video directory not found.');
+	console.log('Creating folder ' + defaultVideoPath);
 
-	if (config.basePath + '/videos' !== config.videosPath) {
-		console.log('However, custom videos path used:', config.videosPath);
-	}
-
-	fs.mkdirSync(config.basePath + '/videos', { recursive: true });
+	fs.mkdirSync(defaultVideoPath, { recursive: true });
 }
 
-if (!fs.existsSync(config.basePath + '/audio')) {
-	console.log('Default audio path not found. Creating audio directory ' + config.basePath + '/audio');
+if (config.audioPath === defaultAudioPath && !fs.existsSync(defaultAudioPath)) {
+	console.log('Default audio directory not found.');
+	console.log('Creating folder ' + defaultAudioPath);
 
-	if (config.basePath + '/audio' !== config.audioPath) {
-		console.log('However, custom audio path used:', config.audioPath);
-	}
-
-	fs.mkdirSync(config.basePath + '/audio', { recursive: true });
+	fs.mkdirSync(defaultAudioPath, { recursive: true });
 }
 
 module.exports = config;
