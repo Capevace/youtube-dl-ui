@@ -48,8 +48,7 @@ Lukas Mateffy – [@Capevace](https://twitter.com/capevace) – [mateffy.me](htt
 Distributed under the MIT license. See `LICENSE` for more information.
 
 ## Contributing
-
-1. Fork it (<https://github.com/capevace/mission-control/fork>)
+1. Fork it (<https://github.com/capevace/youtube-dl-ui/fork>)
 2. Create your feature branch (`git checkout -b feature/fooBar`)
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
