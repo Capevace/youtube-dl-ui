@@ -41,6 +41,10 @@ if (argv.audioPath) {
 	config.audioPath = argv.audioPath;
 }
 
+if (argv.socketPath) {
+	config.http.socketPath = argv.socketPath;
+}
+
 if (!fs.existsSync(config.basePath)) {
 	console.log('Base path not found. Creating base directory ' + config.basePath);
 
@@ -81,5 +85,14 @@ if (config.audioPath === defaultAudioPath && !fs.existsSync(defaultAudioPath)) {
 
 	fs.mkdirSync(defaultAudioPath, { recursive: true });
 }
+
+console.log('=== Using Configuration ===');
+console.log(`Debug Mode: ${config.debug ? 'Enabled' : 'Disabled'}`);
+console.log(`Video directory: ${config.videoPath}`);
+console.log(`Audio directory: ${config.audioPath}`);
+console.log(`HTTP Port: ${config.http.port}`);
+console.log(`Socket URL Path: ${config.http.socketPath}`);
+console.log('');
+
 
 module.exports = config;
