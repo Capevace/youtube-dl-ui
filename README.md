@@ -1,6 +1,6 @@
 <div align="center">
 	<a href="https://mateffy.me/youtube-dl-ui">
-		<img src="resources/screenshot.png">
+		<img src="resources/screenshot-1.1.0.png">
 	</a>
 	<h1>youtube-dl-ui</h1>
 	<p>
@@ -40,6 +40,10 @@ Options:
 A config file for youtube-dl-ui will be created at `$HOME_DIR/.youtube-dl-ui/config`. However, options passed as command line arguments override settings in this file.
 
 ## Changelog
+### Version 1.1.0
+- Updated design to fit new version of @capevace/mission-control
+- Fixed some socket connection issues
+
 ### Version 1.0.3
 - Added CLI flag for socket path
 - Added config log at startup for verification
