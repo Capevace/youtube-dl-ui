@@ -39,6 +39,16 @@ Options:
 ### Config
 A config file for youtube-dl-ui will be created at `$HOME_DIR/.youtube-dl-ui/config`. However, options passed as command line arguments override settings in this file.
 
+### Transparent Mode
+You can append the query parameter `?transparent=1` to the UI URL. This will remove the colored background and move the content to the left.
+
+This is used in [@capevace/mission-control](https://github.com/capevace/mission-control) to embed the download UI in an iFrame.
+
+Example:
+```
+https://example.com/youtube-dl-ui?transparent=1
+```
+
 ## Changelog
 ### Version 1.1.0
 - Updated design to fit new version of @capevace/mission-control
