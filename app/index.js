@@ -35,7 +35,7 @@ app.use(morgan('[HTTP] :remote-addr :remote-user :method :url HTTP/:http-version
 app.get('/', (req, res) => {
 	const pageContent = fs.readFileSync(__dirname + '/views/index.html')
 		.toString()
-		.replace(/\{\{SOCKET_PATH\}\}/g, config.http.socketPath);
+		.replace(/{{SOCKET_PATH}}/g, config.http.socketPath);
 
 	res.set('Content-Type', 'text/html').send(pageContent);
 });
@@ -60,6 +60,7 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('download', async data => {
+		console.log('hiii');
 		const id = cuid();
 
 		let video = {
@@ -78,14 +79,18 @@ io.on('connection', (socket) => {
 		pushVideoQueue();
 
 		try {
-			await download(data.url, {
-				extractAudio: data.extractAudio
-			}, (outputLine) => {
-				console.log(`[${id}] ${outputLine}`);
+			await download(
+				data.url, 
+				{
+					extractAudio: data.extractAudio
+				}, 
+				(outputLine) => {
+					console.log(`[${id}] ${outputLine}`);
 
-				video.output.push(outputLine);
-				pushVideoQueue();
-			});
+					video.output.push(outputLine);
+					pushVideoQueue();
+				}
+			);
 
 			console.log(`[${id}] Download successful`);
 

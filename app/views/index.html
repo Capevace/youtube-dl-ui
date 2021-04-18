@@ -6,22 +6,30 @@
 		body {
 			-webkit-font-smoothing: antialiased;
     		-moz-osx-font-smoothing: grayscale;
-			margin: 0;
 			padding: 0;
-			background: #2c2b3f;
+			margin: 0;
+			max-width: 800px;
+			background: transparent;
+
 			color: white;
-			font-family: Fira Sans,system-ui,BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,sans-serif;
+			font-family: Open Sans,system-ui,BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,sans-serif;
+		}
+
+		body.not-transparent {
+			background: #431886;
+
+			margin: auto;
 		}
 
 		.download, .queue { 
-			padding: 3rem 3rem 0rem 3rem;
+			padding: 4rem 4rem 0rem 4rem;
 		}
 
 		h2 {
 			margin-top: 0;
-			font-size: .75rem;
-			color: #9592de;
-			font-weight: 400;
+			font-size: 0.75rem;
+			color: rgba(167, 139, 250, 1);
+			font-weight: 600;
 		}
 
 		.download .inputs {
@@ -34,18 +42,23 @@
 			align-items: center;
 			margin-left: 1rem;
 			margin-right: 1rem;
+			color: #A78BFA;
 		}
 
 		.download .inputs button {
 			padding: 0.5rem;
-			border-radius: 9999px;
-			background-color: #56547f;
+			border-radius: .5rem;
+			background-color: #6D28D9;
 			border: none;
 			color: #e6e8ff;
-			font-size: .875rem;
-			padding: .5rem .75rem;
-			font-weight: 500;
+			font-size: .9rem;
+			padding: .2rem 1.8rem;
+			font-weight: 600;
 			cursor: pointer;
+		}
+
+		.download .inputs button:hover {
+			background: #7C3AED;
 		}
 
 		.download .inputs #url {
@@ -53,8 +66,17 @@
 			color: #e6e8ff;
 			border: none;
 			flex: 1;
-			background: #69669b;
+			background: #6D28D9;
 			padding: .5rem;
+			font-size: 20px;
+			font-weight: bold;
+			outline: 0;
+			border: 3px solid transparent;
+			transition: border-color 200ms ease-out;
+		}
+
+		.download .inputs #url:focus {
+			border-color: #8B5CF6;
 		}
 
 		@media (max-width: 613px) {
@@ -80,7 +102,7 @@
 
 		.queue .video {
 			width: 100%;
-		    background: #252436;
+		    background: #6D28D9;
 		    border-radius: .8rem;
 		    padding: 1rem;
 		    box-sizing: border-box;
@@ -96,7 +118,7 @@
 		}
 
 		.queue .video div:first-of-type button {
-			background: #56547f;
+			background: #7C3AED;
 			border: none;
 			cursor: pointer;
 			color: white;
@@ -111,11 +133,12 @@
 		}
 	</style>
 </head>
-<body style="background: #2c2b3f;">
+<body>
 <form class="download">
 	<h2>Download YouTube Video</h2>
 	<div class="inputs">
-		<input type="url" name="url" id="url" placeholder="Youtube URL (https://youtube.com/watch?...)">
+		<input type="url" name="url" id="url" required placeholder="Youtube URL (https://youtube.com/watch?...)">
+		
 		<label>
 			<input type="checkbox" name="audio" id="audio">
 			&nbsp;Audio only
@@ -137,108 +160,123 @@
 	</div>
 </div>
 
-<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/youtube-downloader/socket.io/socket.io.js"></script>
 <script type="text/javascript">
-const socket = io({
-	path: '{{SOCKET_PATH}}'
-});
+	const urlParams = new URLSearchParams(window.location.search);
+	const transparent = urlParams.get('transparent') || '';
 
-document
-	.querySelector('form')
-	.addEventListener('submit', (e) => {
-		e.preventDefault();
-
-		const url = document.querySelector('#url').value;
-		const extractAudio = document.querySelector('#audio').checked;
-
-		socket.emit('download', {
-			url,
-			extractAudio
-		});
-
-		document.querySelector('#url').value = '';
+	if (!transparent || transparent === '') {
+		document.body.classList.add('not-transparent');
+	}
+</script>
+<script type="text/javascript">
+	const socket = io({
+		path: window.location.pathname + '/socket.io'
 	});
 
-const allMessages = (output) => {
-	let content = '';
-	for (const message of output) {
-		content = message + content;
-	}
-	return content;
-};
+	socket.on('connect', console.info.bind(console));
+	socket.on('authenticated', console.info.bind(console));
+	socket.on('connect_error', console.error.bind(console));
+	socket.on('connect_timeout', console.error.bind(console));
+	socket.on('unauthorized', console.error.bind(console));
+	socket.on('reconnect_failed', console.warn.bind(console));
 
-let expandedVideos = {};
-let videos = [];
-function updateQueue(videos) {
-	const container = document.querySelector('#queue');
-	container.innerHTML = '';
+	document
+		.querySelector('form')
+		.addEventListener('submit', (e) => {
+			e.preventDefault();
 
-	Object.values(videos).forEach(video => {
-		const videoDiv = document.createElement('div');
-		videoDiv.classList.add('video');
+			const url = document.querySelector('#url').value;
+			const extractAudio = document.querySelector('#audio').checked;
 
-		const titleDiv = document.createElement('div');
-		const urlSpan = document.createElement('span');
-		const expandButton = document.createElement('button');
-		const messagesPre = document.createElement('pre');
-
-		urlSpan.textContent = video.url;
-		titleDiv.append(urlSpan);
-
-		const renderMessages = () => {
-			if (expandedVideos[video.id]) {
-				messagesPre.textContent = allMessages(video.output);
-				expandButton.textContent = 'Less';
-			} else {
-				messagesPre.textContent = video.output[video.output.length - 1] || '';
-				expandButton.textContent = 'More';
-			}
-		};
-
-		expandButton.textContent = 'More';
-		expandButton.addEventListener('click', () => {
-			if (expandedVideos[video.id]) {
-				delete expandedVideos[video.id];
-			} else {
-				expandedVideos[video.id] = true;
-			}
-
-			renderMessages();
-		});
-		titleDiv.append(expandButton);
-		videoDiv.append(titleDiv);
-
-		messagesPre.textContent = video.output[video.output.length - 1] || '';
-		videoDiv.append(messagesPre);
-
-		renderMessages();
-
-		if (video.error) {
-			const errorPre = document.createElement('pre');
-			errorPre.classList.add('error');
-			errorPre.textContent = video.error;
-
-			const button = document.createElement('button');
-			button.textContent = 'Hide';
-			button.addEventListener('click', e => {
-				e.preventDefault();
-
-				socket.emit('remove-from-queue', { id: video.id });
+			socket.emit('download', {
+				url,
+				extractAudio
 			});
 
-			videoDiv.append(errorPre);
-			videoDiv.append(button);
+			document.querySelector('#url').value = '';
+		});
+
+	const allMessages = (output) => {
+		let content = '';
+		for (const message of output) {
+			content = message + content;
 		}
+		return content;
+	};
 
-		container.append(videoDiv);
+	let expandedVideos = {};
+	let videos = [];
+	function updateQueue(videos) {
+		const container = document.querySelector('#queue');
+		container.innerHTML = '';
+
+		Object.values(videos).forEach(video => {
+			const videoDiv = document.createElement('div');
+			videoDiv.classList.add('video');
+
+			const titleDiv = document.createElement('div');
+			const urlSpan = document.createElement('span');
+			const expandButton = document.createElement('button');
+			const messagesPre = document.createElement('pre');
+
+			urlSpan.textContent = video.url;
+			titleDiv.append(urlSpan);
+
+			const renderMessages = () => {
+				if (expandedVideos[video.id]) {
+					messagesPre.textContent = allMessages(video.output);
+					expandButton.textContent = 'Less';
+				} else {
+					messagesPre.textContent = video.output[video.output.length - 1] || '';
+					expandButton.textContent = 'More';
+				}
+			};
+
+			expandButton.textContent = 'More';
+			expandButton.addEventListener('click', () => {
+				if (expandedVideos[video.id]) {
+					delete expandedVideos[video.id];
+				} else {
+					expandedVideos[video.id] = true;
+				}
+
+				renderMessages();
+			});
+			titleDiv.append(expandButton);
+			videoDiv.append(titleDiv);
+
+			messagesPre.textContent = video.output[video.output.length - 1] || '';
+			videoDiv.append(messagesPre);
+
+			renderMessages();
+
+			if (video.error) {
+				const errorPre = document.createElement('pre');
+				errorPre.classList.add('error');
+				errorPre.textContent = video.error;
+
+				const button = document.createElement('button');
+				button.textContent = 'Hide';
+				button.addEventListener('click', e => {
+					e.preventDefault();
+
+					socket.emit('remove-from-queue', { id: video.id });
+				});
+
+				videoDiv.append(errorPre);
+				videoDiv.append(button);
+			}
+
+			container.append(videoDiv);
+		});
+	}
+
+	socket.on('queue-update', data => {
+		videos = data.queue;
+		updateQueue(videos);
 	});
-}
-
-socket.on('queue-update', data => {
-	videos = data.queue;
-	updateQueue(videos);
-});
 </script>
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Fira+Mono|Fira+Sans:300,400,500,600" defer async>
+<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Fira+Mono|Open+Sans:300,400,500,600" defer async>
 </body>
 </html>
