@@ -2,9 +2,9 @@
   "name": "youtube-dl-ui",
   "version": "1.1.0",
   "description": "A simple UI server for youtube-dl, letting you download high quality video or audio.",
-  "main": "app/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "node app/index.js"
+    "start": "node src/index.js"
   },
   "repository": {
     "type": "git",
@@ -16,7 +16,7 @@
     "url": "https://github.com/capevace/mission-control-ytdl/issues"
   },
   "bin": {
-    "youtube-dl-ui": "app/index.js"
+    "youtube-dl-ui": "src/index.js"
   },
   "homepage": "https://github.com/capevace/mission-control-ytdl#readme",
   "dependencies": {
