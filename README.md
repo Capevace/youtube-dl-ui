@@ -19,7 +19,7 @@ $ npm install -g youtube-dl-ui
 You can now start the server like you would any binary.
 ```sh
 $ youtube-dl-ui
-v1.0.3
+v1.2.0
 ```
 
 ### Options
@@ -37,7 +37,27 @@ Options:
 ```
 
 ### Config
-A config file for youtube-dl-ui will be created at `$HOME_DIR/.youtube-dl-ui/config`. However, options passed as command line arguments override settings in this file.
+
+#### Environment Variables
+The following environment variables can be set, to control `youtube-dl-ui`:
+
+| Environment variable | Type                             | Command-line equivalent         |
+| -------------------- | -------------------------------- | ------------------------------- |
+| PORT                 | number (e.g. 8080)               | --port 8080                     |
+| VIDEO_PATH           | string (e.g. ~/Downloads/videos) | --video-path ~/Downloads/videos |
+| AUDIO_PATH           | string (e.g. ~/Downloads/audio)  | --video-path ~/Downloads/audio  |
+| SOCKET_PATH          | string (e.g. /socket.io)         | --socket-path /socket.io        |
+| DEBUG                | boolean                          | --debug                         |
+
+#### Config file
+[RC](https://github.com/dominictarr/rc) is used to look for config files and can be used in the following ways:
+* if you passed an option `--config file` then from that file
+* `$HOME/.youtube-dl-ui/config`
+* `$HOME/.config/youtube-dl-ui`
+* `$HOME/.config/youtube-dl-ui/config`
+* `/etc/youtube-dl-ui/config`
+
+Settings from this file will be overridden, if you also set options using environment variables or command line arguments.
 
 ### Transparent Mode
 You can append the query parameter `?transparent=1` to the UI URL. This will remove the colored background and move the content to the left.
@@ -50,6 +70,11 @@ https://example.com/youtube-dl-ui?transparent=1
 ```
 
 ## Changelog
+### Version 1.2.0
+- Added Docker support
+- Removed automatic config file creation, you will need to do so yourself now
+- Added configuration via environment variables
+
 ### Version 1.1.0
 - Updated design to fit new version of @capevace/mission-control
 - Fixed some socket connection issues
