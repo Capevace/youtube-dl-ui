@@ -1,282 +1,301 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>YouTube Downloader</title>
-	<style type="text/css">
-		body {
-			-webkit-font-smoothing: antialiased;
-    		-moz-osx-font-smoothing: grayscale;
-			padding: 0;
-			margin: 0;
-			max-width: 800px;
-			background: transparent;
+	<head>
+		<title>YouTube Downloader</title>
+		<style type="text/css">
+			body {
+				-webkit-font-smoothing: antialiased;
+				-moz-osx-font-smoothing: grayscale;
+				padding: 0;
+				margin: 0;
+				max-width: 800px;
+				background: transparent;
 
-			color: white;
-			font-family: Open Sans,system-ui,BlinkMacSystemFont,-apple-system,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,sans-serif;
-		}
-
-		body.not-transparent {
-			background: #431886;
-
-			margin: auto;
-		}
-
-		.download, .queue { 
-			padding: 4rem 4rem 0rem 4rem;
-		}
-
-		h2 {
-			margin-top: 0;
-			font-size: 0.75rem;
-			color: rgba(167, 139, 250, 1);
-			font-weight: 600;
-		}
-
-		.download .inputs {
-			display: flex;
-			width: 100%;
-		}
-
-		.download .inputs label {
-			display: flex;
-			align-items: center;
-			margin-left: 1rem;
-			margin-right: 1rem;
-			color: #A78BFA;
-		}
-
-		.download .inputs button {
-			padding: 0.5rem;
-			border-radius: .5rem;
-			background-color: #6D28D9;
-			border: none;
-			color: #e6e8ff;
-			font-size: .9rem;
-			padding: .2rem 1.8rem;
-			font-weight: 600;
-			cursor: pointer;
-		}
-
-		.download .inputs button:hover {
-			background: #7C3AED;
-		}
-
-		.download .inputs #url {
-			border-radius: .5rem;
-			color: #e6e8ff;
-			border: none;
-			flex: 1;
-			background: #6D28D9;
-			padding: .5rem;
-			font-size: 20px;
-			font-weight: bold;
-			outline: 0;
-			border: 3px solid transparent;
-			transition: border-color 200ms ease-out;
-		}
-
-		.download .inputs #url:focus {
-			border-color: #8B5CF6;
-		}
-
-		@media (max-width: 613px) {
-			.download, .queue { 
-				padding: 1.25rem 1.25rem 0rem 1.25rem;
+				color: white;
+				font-family: Open Sans, system-ui, BlinkMacSystemFont,
+					-apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+					Droid Sans, Helvetica Neue, sans-serif;
 			}
-		}
 
-		@media (max-width: 463px) {
+			body.not-transparent {
+				background: #431886;
+
+				margin: auto;
+			}
+
+			.download,
+			.queue {
+				padding: 4rem 4rem 0rem 4rem;
+			}
+
+			h2 {
+				margin-top: 0;
+				font-size: 0.75rem;
+				color: rgba(167, 139, 250, 1);
+				font-weight: 600;
+			}
+
 			.download .inputs {
-				flex-wrap: wrap;
+				display: flex;
+				width: 100%;
 			}
 
-			.download .inputs #url {
-				margin-bottom: 10px;
-				margin-right: 0;
+			.download .inputs label {
+				display: flex;
+				align-items: center;
+				margin-left: 1rem;
+				margin-right: 1rem;
+				color: #a78bfa;
 			}
 
 			.download .inputs button {
-				flex: 1;
+				padding: 0.5rem;
+				border-radius: 0.5rem;
+				background-color: #6d28d9;
+				border: none;
+				color: #e6e8ff;
+				font-size: 0.9rem;
+				padding: 0.2rem 1.8rem;
+				font-weight: 600;
+				cursor: pointer;
 			}
-		}
 
-		.queue .video {
-			width: 100%;
-		    background: #6D28D9;
-		    border-radius: .8rem;
-		    padding: 1rem;
-		    box-sizing: border-box;
-		}
+			.download .inputs button:hover {
+				background: #7c3aed;
+			}
 
-		.queue .video div:first-of-type {
-			display: flex;
-		}
+			.download .inputs #url {
+				border-radius: 0.5rem;
+				color: #e6e8ff;
+				border: none;
+				flex: 1;
+				background: #6d28d9;
+				padding: 0.5rem;
+				font-size: 20px;
+				font-weight: bold;
+				outline: 0;
+				border: 3px solid transparent;
+				transition: border-color 200ms ease-out;
+			}
 
-		.queue .video div:first-of-type span {
-			flex: 1;
-			font-size: .7rem;
-		}
+			.download .inputs #url:focus {
+				border-color: #8b5cf6;
+			}
 
-		.queue .video div:first-of-type button {
-			background: #7C3AED;
-			border: none;
-			cursor: pointer;
-			color: white;
-			border-radius: .5rem;
-		}
+			@media (max-width: 613px) {
+				.download,
+				.queue {
+					padding: 1.25rem 1.25rem 0rem 1.25rem;
+				}
+			}
 
-		.queue .video pre {
-			font-family: Fira Mono, monospace;
-			font-size: .8rem;
-			overflow-x: scroll;
-			margin-bottom: 0;
-		}
-	</style>
-</head>
-<body>
-<form class="download">
-	<h2>Download YouTube Video</h2>
-	<div class="inputs">
-		<input type="url" name="url" id="url" required placeholder="Youtube URL (https://youtube.com/watch?...)">
-		
-		<label>
-			<input type="checkbox" name="audio" id="audio">
-			&nbsp;Audio only
-		</label>
-		<button type="submit">Download</button>
-	</div>
-</form>
+			@media (max-width: 463px) {
+				.download .inputs {
+					flex-wrap: wrap;
+				}
 
-<div class="queue">
-	<h2>Queue</h2>
-	<div id="queue">
-		<!-- <div class="video">
+				.download .inputs #url {
+					margin-bottom: 10px;
+					margin-right: 0;
+				}
+
+				.download .inputs button {
+					flex: 1;
+				}
+			}
+
+			.queue .video {
+				width: 100%;
+				background: #6d28d9;
+				border-radius: 0.8rem;
+				padding: 1rem;
+				box-sizing: border-box;
+			}
+
+			.queue .video div:first-of-type {
+				display: flex;
+			}
+
+			.queue .video div:first-of-type span {
+				flex: 1;
+				font-size: 0.7rem;
+			}
+
+			.queue .video div:first-of-type button {
+				background: #7c3aed;
+				border: none;
+				cursor: pointer;
+				color: white;
+				border-radius: 0.5rem;
+			}
+
+			.queue .video pre {
+				font-family: Fira Mono, monospace;
+				font-size: 0.8rem;
+				overflow-x: scroll;
+				margin-bottom: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<form class="download">
+			<h2>Download YouTube Video</h2>
+			<div class="inputs">
+				<input
+					type="url"
+					name="url"
+					id="url"
+					required
+					placeholder="Youtube URL (https://youtube.com/watch?...)"
+				/>
+
+				<label>
+					<input type="checkbox" name="audio" id="audio" />
+					&nbsp;Audio only
+				</label>
+				<button type="submit">Download</button>
+			</div>
+		</form>
+
+		<div class="queue">
+			<h2>Queue</h2>
+			<div id="queue">
+				<!-- <div class="video">
 			<div>
 				<span>https://www.youtube.com/watch?v=J7VMjzCRddw</span>
 				<button>Expand</button>
 			</div>
 			<pre>Messages</pre>
 		</div> -->
-	</div>
-</div>
+			</div>
+		</div>
 
-<script type="text/javascript" src="/youtube-downloader/socket.io/socket.io.js"></script>
-<script type="text/javascript">
-	const urlParams = new URLSearchParams(window.location.search);
-	const transparent = urlParams.get('transparent') || '';
+		<script
+			type="text/javascript"
+			src="{{SOCKET_PATH}}/socket.io.js"
+		></script>
+		<script type="text/javascript">
+			const urlParams = new URLSearchParams(window.location.search);
+			const transparent = urlParams.get('transparent') || '';
 
-	if (!transparent || transparent === '') {
-		document.body.classList.add('not-transparent');
-	}
-</script>
-<script type="text/javascript">
-	const socket = io({
-		path: window.location.pathname + '/socket.io'
-	});
-
-	socket.on('connect', console.info.bind(console));
-	socket.on('authenticated', console.info.bind(console));
-	socket.on('connect_error', console.error.bind(console));
-	socket.on('connect_timeout', console.error.bind(console));
-	socket.on('unauthorized', console.error.bind(console));
-	socket.on('reconnect_failed', console.warn.bind(console));
-
-	document
-		.querySelector('form')
-		.addEventListener('submit', (e) => {
-			e.preventDefault();
-
-			const url = document.querySelector('#url').value;
-			const extractAudio = document.querySelector('#audio').checked;
-
-			socket.emit('download', {
-				url,
-				extractAudio
+			if (!transparent || transparent === '') {
+				document.body.classList.add('not-transparent');
+			}
+		</script>
+		<script type="text/javascript">
+			const socket = io({
+				path: '{{SOCKET_PATH}}',
 			});
 
-			document.querySelector('#url').value = '';
-		});
+			socket.on('connect', console.info.bind(console));
+			socket.on('authenticated', console.info.bind(console));
+			socket.on('connect_error', console.error.bind(console));
+			socket.on('connect_timeout', console.error.bind(console));
+			socket.on('unauthorized', console.error.bind(console));
+			socket.on('reconnect_failed', console.warn.bind(console));
 
-	const allMessages = (output) => {
-		let content = '';
-		for (const message of output) {
-			content = message + content;
-		}
-		return content;
-	};
+			document.querySelector('form').addEventListener('submit', (e) => {
+				e.preventDefault();
 
-	let expandedVideos = {};
-	let videos = [];
-	function updateQueue(videos) {
-		const container = document.querySelector('#queue');
-		container.innerHTML = '';
+				const url = document.querySelector('#url').value;
+				const extractAudio = document.querySelector('#audio').checked;
 
-		Object.values(videos).forEach(video => {
-			const videoDiv = document.createElement('div');
-			videoDiv.classList.add('video');
-
-			const titleDiv = document.createElement('div');
-			const urlSpan = document.createElement('span');
-			const expandButton = document.createElement('button');
-			const messagesPre = document.createElement('pre');
-
-			urlSpan.textContent = video.url;
-			titleDiv.append(urlSpan);
-
-			const renderMessages = () => {
-				if (expandedVideos[video.id]) {
-					messagesPre.textContent = allMessages(video.output);
-					expandButton.textContent = 'Less';
-				} else {
-					messagesPre.textContent = video.output[video.output.length - 1] || '';
-					expandButton.textContent = 'More';
-				}
-			};
-
-			expandButton.textContent = 'More';
-			expandButton.addEventListener('click', () => {
-				if (expandedVideos[video.id]) {
-					delete expandedVideos[video.id];
-				} else {
-					expandedVideos[video.id] = true;
-				}
-
-				renderMessages();
-			});
-			titleDiv.append(expandButton);
-			videoDiv.append(titleDiv);
-
-			messagesPre.textContent = video.output[video.output.length - 1] || '';
-			videoDiv.append(messagesPre);
-
-			renderMessages();
-
-			if (video.error) {
-				const errorPre = document.createElement('pre');
-				errorPre.classList.add('error');
-				errorPre.textContent = video.error;
-
-				const button = document.createElement('button');
-				button.textContent = 'Hide';
-				button.addEventListener('click', e => {
-					e.preventDefault();
-
-					socket.emit('remove-from-queue', { id: video.id });
+				socket.emit('download', {
+					url,
+					extractAudio,
 				});
 
-				videoDiv.append(errorPre);
-				videoDiv.append(button);
+				document.querySelector('#url').value = '';
+			});
+
+			const allMessages = (output) => {
+				let content = '';
+				for (const message of output) {
+					content = message + content;
+				}
+				return content;
+			};
+
+			let expandedVideos = {};
+			let videos = [];
+			function updateQueue(videos) {
+				const container = document.querySelector('#queue');
+				container.innerHTML = '';
+
+				Object.values(videos).forEach((video) => {
+					const videoDiv = document.createElement('div');
+					videoDiv.classList.add('video');
+
+					const titleDiv = document.createElement('div');
+					const urlSpan = document.createElement('span');
+					const expandButton = document.createElement('button');
+					const messagesPre = document.createElement('pre');
+
+					urlSpan.textContent = video.url;
+					titleDiv.append(urlSpan);
+
+					const renderMessages = () => {
+						if (expandedVideos[video.id]) {
+							messagesPre.textContent = allMessages(video.output);
+							expandButton.textContent = 'Less';
+						} else {
+							messagesPre.textContent =
+								video.output[video.output.length - 1] || '';
+							expandButton.textContent = 'More';
+						}
+					};
+
+					expandButton.textContent = 'More';
+					expandButton.addEventListener('click', () => {
+						if (expandedVideos[video.id]) {
+							delete expandedVideos[video.id];
+						} else {
+							expandedVideos[video.id] = true;
+						}
+
+						renderMessages();
+					});
+					titleDiv.append(expandButton);
+					videoDiv.append(titleDiv);
+
+					messagesPre.textContent =
+						video.output[video.output.length - 1] || '';
+					videoDiv.append(messagesPre);
+
+					renderMessages();
+
+					if (video.error) {
+						const errorPre = document.createElement('pre');
+						errorPre.classList.add('error');
+						errorPre.textContent = video.error;
+
+						const button = document.createElement('button');
+						button.textContent = 'Hide';
+						button.addEventListener('click', (e) => {
+							e.preventDefault();
+
+							socket.emit('remove-from-queue', { id: video.id });
+						});
+
+						videoDiv.append(errorPre);
+						videoDiv.append(button);
+					}
+
+					container.append(videoDiv);
+				});
 			}
 
-			container.append(videoDiv);
-		});
-	}
-
-	socket.on('queue-update', data => {
-		videos = data.queue;
-		updateQueue(videos);
-	});
-</script>
-<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Fira+Mono|Open+Sans:300,400,500,600" defer async>
-</body>
+			socket.on('queue-update', (data) => {
+				videos = data.queue;
+				updateQueue(videos);
+			});
+		</script>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="https://fonts.googleapis.com/css?family=Fira+Mono|Open+Sans:300,400,500,600"
+			defer
+			async
+		/>
+	</body>
 </html>
