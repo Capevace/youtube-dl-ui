@@ -135,40 +135,101 @@
 				overflow-x: scroll;
 				margin-bottom: 0;
 			}
+
+			main {
+				display: flex;
+				flex-direction: column;
+				height: 100vh;
+			}
+
+			main > article {
+				flex: 1;
+			}
+
+			footer {
+				opacity: 0.5;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				padding: 10px;
+				font-size: 0.75rem;
+				color: #a78bfa;
+				transition: opacity ease-in-out 200ms;
+				cursor: default;
+			}
+
+			footer:hover {
+				opacity: 1;
+			}
+
+			footer a {
+				cursor: pointer;
+				color: #a78bfa;
+				text-decoration: none;
+			}
+
+			footer a:hover {
+				color: #d7cafb;
+			}
+
+			.block {
+				display: block;
+			}
 		</style>
 	</head>
 	<body>
-		<form class="download">
-			<h2>Download YouTube Video</h2>
-			<div class="inputs">
-				<input
-					type="url"
-					name="url"
-					id="url"
-					required
-					placeholder="Youtube URL (https://youtube.com/watch?...)"
-				/>
+		<main>
+			<article>
+				<form class="download">
+					<h2>Download YouTube Video</h2>
+					<div class="inputs">
+						<input
+							type="url"
+							name="url"
+							id="url"
+							required
+							placeholder="Youtube URL (https://youtube.com/watch?...)"
+						/>
 
-				<label>
-					<input type="checkbox" name="audio" id="audio" />
-					&nbsp;Audio only
-				</label>
-				<button type="submit">Download</button>
-			</div>
-		</form>
+						<label>
+							<input type="checkbox" name="audio" id="audio" />
+							&nbsp;Audio only
+						</label>
+						<button type="submit">Download</button>
+					</div>
+				</form>
 
-		<div class="queue">
-			<h2>Queue</h2>
-			<div id="queue">
-				<!-- <div class="video">
-			<div>
-				<span>https://www.youtube.com/watch?v=J7VMjzCRddw</span>
-				<button>Expand</button>
-			</div>
-			<pre>Messages</pre>
-		</div> -->
-			</div>
-		</div>
+				<div class="queue">
+					<h2>Queue</h2>
+					<div id="queue">
+						<!-- <div class="video">
+					<div>
+						<span>https://www.youtube.com/watch?v=J7VMjzCRddw</span>
+						<button>Expand</button>
+					</div>
+					<pre>Messages</pre>
+				</div> -->
+					</div>
+				</div>
+			</article>
+
+			<footer>
+				<strong class="block">youtube-dl-ui@{{VERSION}}</strong>
+				<div style="margin: 0px 5px"></div>
+				<a
+					class="block"
+					href="https://github.com/capevace/youtube-dl-ui"
+					>GitHub</a
+				>
+
+				<div style="margin: 0px 5px"></div>
+				<a
+					class="block"
+					href="https://github.com/Capevace/youtube-dl-ui/issues"
+					>Bugs</a
+				>
+			</footer>
+		</main>
 
 		<script
 			type="text/javascript"

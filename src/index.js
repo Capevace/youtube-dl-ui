@@ -8,6 +8,7 @@ const express = require('express');
 const app = express();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
+const package = require('../package.json');
 const download = require('./download');
 
 //
@@ -26,20 +27,24 @@ const download = require('./download');
 // 	console.log('An error occurred with the socket:', errorType, errorData)
 // );
 
-
 //
 // SETUP EXPRESS SERVER
 //
-app.use(morgan('[HTTP] :remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms'));
+app.use(
+	morgan(
+		'[HTTP] :remote-addr :remote-user :method :url HTTP/:http-version :status :res[content-length] - :response-time ms'
+	)
+);
 
 app.get('/', (req, res) => {
-	const pageContent = fs.readFileSync(__dirname + '/views/index.html')
+	const pageContent = fs
+		.readFileSync(__dirname + '/views/index.html')
 		.toString()
-		.replace(/{{SOCKET_PATH}}/g, config.http.socketPath);
+		.replace(/{{SOCKET_PATH}}/g, config.http.socketPath)
+		.replace(/{{VERSION}}/g, package.version);
 
 	res.set('Content-Type', 'text/html').send(pageContent);
 });
-
 
 //
 // SETUP SOCKET.IO SERVER
@@ -52,14 +57,14 @@ const pushVideoQueue = () => {
 io.on('connection', (socket) => {
 	socket.emit('queue-update', { queue: videos });
 
-	socket.on('remove-from-queue', data => {
+	socket.on('remove-from-queue', (data) => {
 		console.log('Removing item from queue:', data.id);
 
 		delete videos[data.id];
 		pushVideoQueue();
 	});
 
-	socket.on('download', async data => {
+	socket.on('download', async (data) => {
 		console.log('hiii');
 		const id = cuid();
 
@@ -68,10 +73,9 @@ io.on('connection', (socket) => {
 			started: new Date(),
 			url: data.url,
 			error: null,
-			output: []
+			output: [],
 		};
 
-		
 		console.log(`[${id}] Downloading`, data.url);
 		video.output.push(`Downloading ${data.url}`);
 
@@ -80,10 +84,10 @@ io.on('connection', (socket) => {
 
 		try {
 			await download(
-				data.url, 
+				data.url,
 				{
-					extractAudio: data.extractAudio
-				}, 
+					extractAudio: data.extractAudio,
+				},
 				(outputLine) => {
 					console.log(`[${id}] ${outputLine}`);
 
@@ -96,7 +100,6 @@ io.on('connection', (socket) => {
 
 			delete videos[id];
 			pushVideoQueue();
-
 		} catch (e) {
 			console.log(`[${id}] Download failed:`, e);
 
@@ -106,4 +109,6 @@ io.on('connection', (socket) => {
 	});
 });
 
-http.listen(config.http.port, () => console.log('[YTDL] Listening on port', config.http.port));
+http.listen(config.http.port, () =>
+	console.log('[YTDL] Listening on port', config.http.port)
+);
