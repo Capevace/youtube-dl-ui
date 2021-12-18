@@ -22,7 +22,7 @@ You can now start the server like you would any binary.
 
 ```sh
 $ youtube-dl-ui
-v1.2.0
+v1.3.0
 ```
 
 ### Options
@@ -79,6 +79,10 @@ https://example.com/youtube-dl-ui?transparent=1
 ```
 
 ## Changelog
+
+### Version 1.3.0
+
+- Added footer which shows current version
 
 ### Version 1.2.1
 
