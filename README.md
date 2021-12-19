@@ -10,6 +10,18 @@
 
 <br>
 
+## Overview
+
+- [Installation](#installation)
+- [Usage](#usage)
+  - [Options](#options)
+  - [Config](#config)
+    - [Environment variables](#environment-variables)
+    - [Config file](#config-file)
+  - [Transparent mode](#transparent-mode)
+  - [Swapping out `youtube-dl`](#swapping-out-youtube-dl)
+- [Changelog](#changelog)
+
 ## Installation
 
 ```sh
@@ -45,7 +57,7 @@ Options:
 
 ### Config
 
-#### Environment Variables
+#### Environment variables
 
 The following environment variables can be set, to control `youtube-dl-ui`:
 
@@ -70,7 +82,7 @@ The following environment variables can be set, to control `youtube-dl-ui`:
 
 Settings from this file will be overridden, if you also set options using environment variables or command line arguments.
 
-### Transparent Mode
+### Transparent mode
 
 You can append the query parameter `?transparent=1` to the UI URL. This will remove the colored background and move the content to the left.
 
