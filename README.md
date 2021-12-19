@@ -57,7 +57,7 @@ Options:
 
 ### Config
 
-#### Environment variables
+#### Environment variables & command-line flags
 
 The following environment variables can be set, to control `youtube-dl-ui`:
 
