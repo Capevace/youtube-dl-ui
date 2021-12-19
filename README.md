@@ -34,7 +34,7 @@ You can now start the server like you would any binary.
 
 ```sh
 $ youtube-dl-ui
-v1.4.0
+v1.4.1
 ```
 
 ### Options
@@ -111,6 +111,10 @@ YOUTUBE_DL=/usr/bin/yt-dlp youtube-dl-ui
 ```
 
 ## Changelog
+
+### Version 1.4.1
+
+- Fixed videos not disappearing after download
 
 ### Version 1.4.0
 
