@@ -22,7 +22,7 @@ You can now start the server like you would any binary.
 
 ```sh
 $ youtube-dl-ui
-v1.3.0
+v1.4.0
 ```
 
 ### Options
@@ -35,7 +35,10 @@ Options:
   -p, --port <port>         the port for the http server
   -v, --video-path <path>   path to directory where videos should be saved
   -a, --audio-path <path>   path to directory where audio should be saved
-  -s, --socket-path <path>  url path the socket should connect to
+  -y, --youtube-dl <path>   file path to the youtube-dl binary (so you can set
+                            it to yt-dlp)
+  -s, --socket-path <path>  url path the socket should connect to (useful when
+                            proxying the server)
   -d, --debug               enable debug mode
   -h, --help                display help for command
 ```
@@ -51,6 +54,7 @@ The following environment variables can be set, to control `youtube-dl-ui`:
 | PORT                 | number (e.g. 8080)               | --port 8080                     |
 | VIDEO_PATH           | string (e.g. ~/Downloads/videos) | --video-path ~/Downloads/videos |
 | AUDIO_PATH           | string (e.g. ~/Downloads/audio)  | --video-path ~/Downloads/audio  |
+| YOUTUBE_DL           | string (e.g. /usr/bin/yt-dlp)    | --youtube-dl /usr/bin/yt-dlp    |
 | SOCKET_PATH          | string (e.g. /socket.io)         | --socket-path /socket.io        |
 | DEBUG                | boolean                          | --debug                         |
 
@@ -78,7 +82,29 @@ Example:
 https://example.com/youtube-dl-ui?transparent=1
 ```
 
+### Swapping out [`youtube-dl`](https://youtube-dl.org/)
+
+There are multiple forks of [youtube-dl](https://youtube-dl.org/) like [yt-dlp](https://github.com/yt-dlp/yt-dlp) which have a compatible API and can be used instead of stock youtube-dl.
+
+You can do this by either setting the `YOUTUBE_DL=/usr/bin/yt-dlp` environment variable or by passing the `--youtube-dl /usr/bin/yt-dlp` CLI flag. _To find out your `yt-dlp` path, run `$ which yt-dlp` in your shell._
+
+Example:
+
+```bash
+youtube-dl-ui --youtube-dl /usr/bin/yt-dlp
+
+# or
+
+YOUTUBE_DL=/usr/bin/yt-dlp youtube-dl-ui
+```
+
 ## Changelog
+
+### Version 1.4.0
+
+- Added `YOUTUBE_DL` environment variable (and CLI option `--youtube-dl`) to set the [youtube-dl](https://youtube-dl.org/) binary
+  This lets you replace [youtube-dl](https://youtube-dl.org/) with forks like [yt-dlp](https://github.com/yt-dlp/yt-dlp).
+- Added empty queue view
 
 ### Version 1.3.0
 
