@@ -1,9 +1,10 @@
 const fs = require('fs');
 const argv = require('./argv');
 
-const basePath = process.env.NODE_ENV === 'production'
-	? '/etc/youtube-dl-ui'
-	: require('os').homedir() + '/.youtube-dl-ui';
+const basePath =
+	process.env.NODE_ENV === 'production'
+		? '/etc/youtube-dl-ui'
+		: require('os').homedir() + '/.youtube-dl-ui';
 
 const defaultVideoPath = basePath + '/video';
 const defaultAudioPath = basePath + '/audio';
@@ -15,23 +16,26 @@ const config = require('rc')('youtube-dl-ui', {
 	http: {
 		// url: 'http://localhost:3003',
 		socketPath: '/socket.io',
-		port: 3003
+		port: 3003,
 	},
 	// missionControl: {
 	// 	url: 'http://localhost:3000',
 	// 	apiKey: ''
 	// },
 	videoPath: defaultVideoPath,
-	audioPath: defaultAudioPath
+	audioPath: defaultAudioPath,
+	youtubeDl: 'youtube-dl',
 });
 
 config.debug = argv.debug || !!process.env.DEBUG || config.debug;
 
 config.http.port = argv.port || process.env.PORT || config.http.port;
-config.http.socketPath = argv.socketPath || process.env.SOCKET_PATH || config.http.socketPath;
+config.http.socketPath =
+	argv.socketPath || process.env.SOCKET_PATH || config.http.socketPath;
 
 config.videoPath = argv.videoPath || process.env.VIDEO_PATH || config.videoPath;
 config.audioPath = argv.audioPath || process.env.AUDIO_PATH || config.audioPath;
+config.youtubeDl = argv.youtubeDl || process.env.YOUTUBE_DL || config.youtubeDl;
 
 // Create base config file
 // (taken out for now, I don't think it's needed but let's see) - 2021-11-04
@@ -45,7 +49,7 @@ config.audioPath = argv.audioPath || process.env.AUDIO_PATH || config.audioPath;
 // if (!fs.existsSync(config.basePath + '/config')) {
 // 	console.log('Config file not found. Creating...');
 
-// 	fs.writeFileSync(config.basePath + '/config', 
+// 	fs.writeFileSync(config.basePath + '/config',
 // `; YTDL Config File
 // ; Enable debug mode here
 // ;debug=true
@@ -82,6 +86,5 @@ console.log(`Audio directory: ${config.audioPath}`);
 console.log(`HTTP Port: ${config.http.port}`);
 console.log(`Socket URL Path: ${config.http.socketPath}`);
 console.log('');
-
 
 module.exports = config;

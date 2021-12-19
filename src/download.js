@@ -10,15 +10,25 @@ function download(url, options = {}, onOutput = () => {}) {
 		const safeUrl = sanitizeUrl(url);
 		const cwd = options.extractAudio ? config.audioPath : config.videoPath;
 
-		if(!fs.existsSync(cwd)) {
-			return reject(new Error('The specified download directory: ' + cwd + ' does not exist.'));
+		if (!fs.existsSync(cwd)) {
+			return reject(
+				new Error(
+					'The specified download directory: ' +
+						cwd +
+						' does not exist.'
+				)
+			);
 		}
 
 		const downloadProcess = spawn(
-			'youtube-dl', 
-			options.extractAudio 
+			config.youtubeDl,
+			options.extractAudio
 				? ['-x', '--audio-format', 'm4a', safeUrl]
-				: ['--format', 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best', safeUrl],
+				: [
+						'--format',
+						'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
+						safeUrl,
+				  ],
 			{ cwd }
 		);
 
