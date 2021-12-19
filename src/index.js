@@ -65,7 +65,6 @@ io.on('connection', (socket) => {
 	});
 
 	socket.on('download', async (data) => {
-		console.log('hiii');
 		const id = cuid();
 
 		let video = {
@@ -74,6 +73,7 @@ io.on('connection', (socket) => {
 			url: data.url,
 			error: null,
 			output: [],
+			downloadId: null,
 		};
 
 		console.log(`[${id}] Downloading`, data.url);
@@ -98,8 +98,9 @@ io.on('connection', (socket) => {
 
 			console.log(`[${id}] Download successful`);
 
-			delete videos[id];
-			pushVideoQueue();
+			//
+			// delete videos[id];
+			// pushVideoQueue();
 		} catch (e) {
 			console.log(`[${id}] Download failed:`, e);
 

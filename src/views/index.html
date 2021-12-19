@@ -1,3 +1,4 @@
+<!-- prettier-ignore -->
 <!DOCTYPE html>
 <html>
 	<head>
@@ -71,7 +72,7 @@
 				flex: 1;
 				background: #6d28d9;
 				padding: 0.5rem;
-				font-size: 20px;
+				font-size: 15px;
 				font-weight: bold;
 				outline: 0;
 				border: 3px solid transparent;
@@ -175,13 +176,18 @@
 			.block {
 				display: block;
 			}
+
+			.empty h3 {
+				color: #6d28d9;
+				text-align: center;
+			}
 		</style>
 	</head>
 	<body>
 		<main>
 			<article>
 				<form class="download">
-					<h2>Download YouTube Video</h2>
+					<label for="url"><h2>Download YouTube Video</h2></label>
 					<div class="inputs">
 						<input
 							type="url"
@@ -198,8 +204,7 @@
 						<button type="submit">Download</button>
 					</div>
 				</form>
-
-				<div class="queue">
+				<section class="queue">
 					<h2>Queue</h2>
 					<div id="queue">
 						<!-- <div class="video">
@@ -210,7 +215,7 @@
 					<pre>Messages</pre>
 				</div> -->
 					</div>
-				</div>
+				</section>
 			</article>
 
 			<footer>
@@ -279,71 +284,91 @@
 
 			let expandedVideos = {};
 			let videos = [];
+			let downloads = [];
+
 			function updateQueue(videos) {
 				const container = document.querySelector('#queue');
 				container.innerHTML = '';
 
-				Object.values(videos).forEach((video) => {
-					const videoDiv = document.createElement('div');
-					videoDiv.classList.add('video');
+				const videoValues = Object.values(videos);
 
-					const titleDiv = document.createElement('div');
-					const urlSpan = document.createElement('span');
-					const expandButton = document.createElement('button');
-					const messagesPre = document.createElement('pre');
+				if (videoValues.length === 0) {
+					container.append(EmptyStateElement());
+				} else {
+					Object.values(videos).forEach((video) => {
+						const videoDiv = document.createElement('div');
+						videoDiv.classList.add('video');
 
-					urlSpan.textContent = video.url;
-					titleDiv.append(urlSpan);
+						const titleDiv = document.createElement('div');
+						const urlSpan = document.createElement('span');
+						const expandButton = document.createElement('button');
+						const messagesPre = document.createElement('pre');
 
-					const renderMessages = () => {
-						if (expandedVideos[video.id]) {
-							messagesPre.textContent = allMessages(video.output);
-							expandButton.textContent = 'Less';
-						} else {
-							messagesPre.textContent =
-								video.output[video.output.length - 1] || '';
-							expandButton.textContent = 'More';
-						}
-					};
+						urlSpan.textContent = video.url;
+						titleDiv.append(urlSpan);
 
-					expandButton.textContent = 'More';
-					expandButton.addEventListener('click', () => {
-						if (expandedVideos[video.id]) {
-							delete expandedVideos[video.id];
-						} else {
-							expandedVideos[video.id] = true;
-						}
+						const renderMessages = () => {
+							if (expandedVideos[video.id]) {
+								messagesPre.textContent = allMessages(video.output);
+								expandButton.textContent = 'Less';
+							} else {
+								messagesPre.textContent =
+									video.output[video.output.length - 1] || '';
+								expandButton.textContent = 'More';
+							}
+						};
+
+						expandButton.textContent = 'More';
+						expandButton.addEventListener('click', () => {
+							if (expandedVideos[video.id]) {
+								delete expandedVideos[video.id];
+							} else {
+								expandedVideos[video.id] = true;
+							}
+
+							renderMessages();
+						});
+						titleDiv.append(expandButton);
+						videoDiv.append(titleDiv);
+
+						messagesPre.textContent =
+							video.output[video.output.length - 1] || '';
+						videoDiv.append(messagesPre);
 
 						renderMessages();
+
+						if (video.error) {
+							const errorPre = document.createElement('pre');
+							errorPre.classList.add('error');
+							errorPre.textContent = video.error;
+
+							const button = document.createElement('button');
+							button.textContent = 'Hide';
+							button.addEventListener('click', (e) => {
+								e.preventDefault();
+
+								socket.emit('remove-from-queue', { id: video.id });
+							});
+
+							videoDiv.append(errorPre);
+							videoDiv.append(button);
+						}
+
+						container.append(videoDiv);
 					});
-					titleDiv.append(expandButton);
-					videoDiv.append(titleDiv);
+				}
+			}
 
-					messagesPre.textContent =
-						video.output[video.output.length - 1] || '';
-					videoDiv.append(messagesPre);
+			function EmptyStateElement(message = 'No downloads yet') {
+				const container = document.createElement('div');
+				container.classList.add('empty');
 
-					renderMessages();
+				const text = document.createElement('h3');
+				text.textContent = message;
 
-					if (video.error) {
-						const errorPre = document.createElement('pre');
-						errorPre.classList.add('error');
-						errorPre.textContent = video.error;
+				container.append(text)
 
-						const button = document.createElement('button');
-						button.textContent = 'Hide';
-						button.addEventListener('click', (e) => {
-							e.preventDefault();
-
-							socket.emit('remove-from-queue', { id: video.id });
-						});
-
-						videoDiv.append(errorPre);
-						videoDiv.append(button);
-					}
-
-					container.append(videoDiv);
-				});
+				return container;
 			}
 
 			socket.on('queue-update', (data) => {
