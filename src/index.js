@@ -98,9 +98,8 @@ io.on('connection', (socket) => {
 
 			console.log(`[${id}] Download successful`);
 
-			//
-			// delete videos[id];
-			// pushVideoQueue();
+			delete videos[id];
+			pushVideoQueue();
 		} catch (e) {
 			console.log(`[${id}] Download failed:`, e);
 
