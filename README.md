@@ -16,7 +16,7 @@
 - [Usage](#usage)
   - [Options](#options)
   - [Config](#config)
-    - [Environment variables & command-line flags](#environment-variables-command-line-flags)
+    - [Environment variables & command-line flags](#environment-variables--command-line-flags)
     - [Config file](#config-file)
   - [Transparent mode](#transparent-mode)
   - [Swapping out `youtube-dl`](#swapping-out-youtube-dl)
