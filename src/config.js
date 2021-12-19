@@ -83,8 +83,9 @@ console.log('=== Using Configuration ===');
 console.log(`Debug Mode: ${config.debug ? 'Enabled' : 'Disabled'}`);
 console.log(`Video directory: ${config.videoPath}`);
 console.log(`Audio directory: ${config.audioPath}`);
-console.log(`HTTP Port: ${config.http.port}`);
-console.log(`Socket URL Path: ${config.http.socketPath}`);
+console.log(`HTTP port: 	`, config.http.port); // sperate argument, for number color
+console.log(`YouTube-DL path: ${config.http.socketPath}`);
+console.log(`Socket URL path: ${config.http.socketPath}`);
 console.log('');
 
 module.exports = config;
