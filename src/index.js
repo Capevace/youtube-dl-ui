@@ -73,7 +73,6 @@ io.on('connection', (socket) => {
 			url: data.url,
 			error: null,
 			output: [],
-			downloadId: null,
 		};
 
 		console.log(`[${id}] Downloading`, data.url);
