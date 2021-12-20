@@ -2,7 +2,8 @@
 
 const config = require('./config');
 const cuid = require('cuid');
-const fs = require('fs');
+const fs = require('fs/promises');
+const path = require('path');
 const morgan = require('morgan');
 const express = require('express');
 const app = express();
@@ -36,9 +37,8 @@ app.use(
 	)
 );
 
-app.get('/', (req, res) => {
-	const pageContent = fs
-		.readFileSync(__dirname + '/views/index.html')
+app.get('/', async (req, res) => {
+	const pageContent = (await fs.readFile(__dirname + '/views/index.html'))
 		.toString()
 		.replace(/{{SOCKET_PATH}}/g, config.http.socketPath)
 		.replace(/{{VERSION}}/g, package.version);
