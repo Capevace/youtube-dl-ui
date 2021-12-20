@@ -116,6 +116,7 @@ YOUTUBE_DL=/usr/bin/yt-dlp youtube-dl-ui
 
 - Fixed videos not disappearing after download
 - Added `YOUTUBE_DL` option to initial config log
+- Cleaned up `package.json` dependencies
 
 ### Version 1.4.0
 

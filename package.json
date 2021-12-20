@@ -1,6 +1,6 @@
 {
   "name": "youtube-dl-ui",
-  "version": "1.4.2",
+  "version": "1.4.0",
   "description": "A simple UI server for youtube-dl, letting you download high quality video or audio.",
   "main": "src/index.js",
   "scripts": {
@@ -8,26 +8,24 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/capevace/mission-control-ytdl.git"
+    "url": "git+https://github.com/capevace/youtube-dl-ui.git"
   },
   "author": "Lukas Mateffy (@Capevace)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/capevace/mission-control-ytdl/issues"
+    "url": "https://github.com/capevace/youtube-dl-ui/issues"
   },
   "bin": {
     "youtube-dl-ui": "src/index.js"
   },
-  "homepage": "https://github.com/capevace/mission-control-ytdl#readme",
+  "homepage": "https://github.com/capevace/youtube-dl-ui#readme",
   "dependencies": {
     "@braintree/sanitize-url": "^3.1.0",
     "commander": "^6.1.0",
     "cuid": "^2.1.6",
     "express": "^4.17.1",
-    "mission-control-client": "^1.1.0",
     "morgan": "^1.9.1",
     "rc": "^1.2.8",
-    "socket.io": "^4.0.0",
-    "youtube-dl": "^2.0.1"
+    "socket.io": "^4.0.0"
   }
 }
