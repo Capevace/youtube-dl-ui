@@ -37,6 +37,8 @@ app.use(
 	)
 );
 
+app.use('/static', express.static(path.resolve(__dirname, 'static')));
+
 app.get('/', async (req, res) => {
 	const pageContent = (await fs.readFile(__dirname + '/views/index.html'))
 		.toString()
