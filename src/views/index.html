@@ -111,23 +111,52 @@
 				border-radius: 0.8rem;
 				padding: 1rem;
 				box-sizing: border-box;
+				display: block;
+				border: none;
+				text-decoration: none;
+				transition: background 250ms ease-in-out, transform 150ms ease;
+				-webkit-appearance: none;
+				-moz-appearance: none;
+				color: #fff;
+				cursor: pointer;
 			}
 
-			.queue .video div:first-of-type {
+			.queue .video header {
 				display: flex;
+				justify-content: space-between;
 			}
 
-			.queue .video div:first-of-type span {
+			.queue .video header span {
 				flex: 1;
 				font-size: 0.7rem;
+				text-align: left;
 			}
 
-			.queue .video div:first-of-type button {
+			.queue .video header .actions {
+				display:  flex;
+				gap: .7rem;
+			}
+
+			.queue .video header .actions button {
 				background: #7c3aed;
 				border: none;
 				cursor: pointer;
 				color: white;
 				border-radius: 0.5rem;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				gap: .2rem;
+				padding: .15rem .5rem;
+			}
+
+			.queue .video header .actions button:hover {
+				opacity: 0.9;
+			}
+
+			.queue .video header .actions button img {
+				display: inline-block;
+				width: 0.7rem;
 			}
 
 			.queue .video pre {
@@ -207,13 +236,18 @@
 				<section class="queue">
 					<h2>Queue</h2>
 					<div id="queue">
-						<!-- <div class="video">
-					<div>
-						<span>https://www.youtube.com/watch?v=J7VMjzCRddw</span>
-						<button>Expand</button>
-					</div>
-					<pre>Messages</pre>
-				</div> -->
+						<article class="video">
+							<header>
+								<span>
+									https://www.youtube.com/watch?v=J7VMjzCRddw
+								</span>
+								<div>
+									<button>Show more</button>
+									<button>Cancel download</button>
+								</div>
+							</header>
+							<pre>Messages</pre>
+						</article>
 					</div>
 				</section>
 			</article>
@@ -283,8 +317,26 @@
 			};
 
 			let expandedVideos = {};
-			let videos = [];
+			let videos = [
+				{
+					id: 'test',
+					started: new Date(),
+					url: 'http://example.com',
+					error: null,
+					output: ['Test'],
+				},
+			];
 			let downloads = [];
+
+			socket.on('queue-update', (data) => {
+				// videos = data.queue;
+				updateQueue(videos);
+			});
+
+			// Preload icons
+			new Image(addToBaseUrl('static/arrow-up.svg'));
+			new Image(addToBaseUrl('static/arrow-down.svg'));
+			new Image(addToBaseUrl('static/cancel.svg'));
 
 			function updateQueue(videos) {
 				const container = document.querySelector('#queue');
@@ -296,25 +348,39 @@
 					container.append(EmptyStateElement());
 				} else {
 					Object.values(videos).forEach((video) => {
-						const videoDiv = document.createElement('div');
+						const videoDiv = document.createElement('article');
 						videoDiv.classList.add('video');
 
-						const titleDiv = document.createElement('div');
+						const header = document.createElement('header');
 						const urlSpan = document.createElement('span');
+						const actions = document.createElement('div');
 						const expandButton = document.createElement('button');
+						const stopButton = document.createElement('button');
 						const messagesPre = document.createElement('pre');
 
 						urlSpan.textContent = video.url;
-						titleDiv.append(urlSpan);
+						header.append(urlSpan);
 
 						const renderMessages = () => {
 							if (expandedVideos[video.id]) {
-								messagesPre.textContent = allMessages(video.output);
+								messagesPre.textContent = allMessages(
+									video.output
+								);
 								expandButton.textContent = 'Less';
+
+								const icon = document.createElement('img');
+								icon.src = addToBaseUrl('static/arrow-up.svg');
+								expandButton.prepend(icon);
 							} else {
 								messagesPre.textContent =
 									video.output[video.output.length - 1] || '';
 								expandButton.textContent = 'More';
+
+								const icon = document.createElement('img');
+								icon.src = addToBaseUrl(
+									'static/arrow-down.svg'
+								);
+								expandButton.prepend(icon);
 							}
 						};
 
@@ -328,8 +394,23 @@
 
 							renderMessages();
 						});
-						titleDiv.append(expandButton);
-						videoDiv.append(titleDiv);
+
+						stopButton.textContent = 'Cancel';
+						stopButton.addEventListener('click', () => {
+							socket.send('cancel-download', { id: video.id });
+						});
+
+						const icon = document.createElement('img');
+						icon.src = addToBaseUrl(
+							'static/cancel.svg'
+						);
+						stopButton.prepend(icon);
+
+						actions.classList.add('actions');
+						actions.append(expandButton);
+						actions.append(stopButton);
+						header.append(actions);
+						videoDiv.append(header);
 
 						messagesPre.textContent =
 							video.output[video.output.length - 1] || '';
@@ -347,7 +428,9 @@
 							button.addEventListener('click', (e) => {
 								e.preventDefault();
 
-								socket.emit('remove-from-queue', { id: video.id });
+								socket.emit('remove-from-queue', {
+									id: video.id,
+								});
 							});
 
 							videoDiv.append(errorPre);
@@ -366,15 +449,16 @@
 				const text = document.createElement('h3');
 				text.textContent = message;
 
-				container.append(text)
+				container.append(text);
 
 				return container;
 			}
 
-			socket.on('queue-update', (data) => {
-				videos = data.queue;
-				updateQueue(videos);
-			});
+			function addToBaseUrl(path) {
+				return location.pathname[location.pathname.length - 1] === '/'
+					? location.pathname + path
+					: location.pathname + '/' + path;
+			}
 		</script>
 		<link
 			rel="stylesheet"
