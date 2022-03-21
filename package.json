@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/capevace/youtube-dl-ui#readme",
   "dependencies": {
-    "@braintree/sanitize-url": "^3.1.0",
+    "@braintree/sanitize-url": "^6.0.0",
     "commander": "^6.1.0",
     "cuid": "^2.1.6",
     "express": "^4.17.1",
